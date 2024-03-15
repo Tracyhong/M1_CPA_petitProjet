@@ -4,145 +4,20 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Random;
 //Problème du cercle minimum / Smallest enclosing disk : Welzl algorithm
-/***************************************************************
- * TME 1: calcul de diamètre et de cercle couvrant minimum.    *
- *   - Trouver deux points les plus éloignés d'un ensemble de  *
- *     points donné en entrée.                                 *
- *   - Couvrir l'ensemble de poitns donné en entrée par un     *
- *     cercle de rayon minimum.                                *
- *                                                             *
- * class Circle:                                               *
- *   - Circle(Point c, int r) constructs a new circle          *
- *     centered at c with radius r.                            *
- *   - Point getCenter() returns the center point.             *
- *   - int getRadius() returns the circle radius.              *
- *                                                             *
- * class Line:                                                 *
- *   - Line(Point p, Point q) constructs a new line            *
- *     starting at p ending at q.                              *
- *   - Point getP() returns one of the two end points.         *
- *   - Point getQ() returns the other end point.               *
- ***************************************************************/
 import supportGUI.Circle;
 import supportGUI.Line;
 
 public class DefaultTeam {
 
-  // calculCercleMin: ArrayList<Point> --> Circle
-  //   renvoie un cercle couvrant tout point de la liste, de rayon minimum.
-	
-  //créer un autre viewer pour lancer calcul cercleMinNaif et calculCercleMinWelzl
-	public Circle calculCercleMin(ArrayList<Point> points) {
-        Circle cercle;
-		//cercle = algoNaif(points);
-		cercle = algoWelzl(points);
-		
-		return cercle;
-	}
-    // public Circle calculCercleMinWelzl(ArrayList<Point> points) {
-    //     Circle cercle;
-	// 	cercle = algoWelzl(points);
-		
-	// 	return cercle;
-	// }
-	
- 	private Circle trivialCircle(ArrayList<Point> inputsPoints, ArrayList<Point> R){
-            if (inputsPoints.isEmpty() && R.size() == 0)
-                return new Circle(new Point(0, 0), 10);
-            Random r = new Random();
-            Circle D = null;
-            if (R.size() == 1) {
-                D = new Circle(R.get(0), 0);
-            }
-            if (R.size() == 2) {
-    
-                double cx = (R.get(0).x + R.get(1).x) / 2;
-                double cy = (R.get(0).y + R.get(1).y) / 2;
-                double d = R.get(0).distance(R.get(1)) / 2;
-                Point p = new Point((int) cx, (int) cy);
-                D = new Circle(p, (int) Math.ceil(d));
-            } else {
-                if (R.size() == 3)
-                    D = circle3point(R.get(0), R.get(1), R.get(2));
-            }
-            return D;
-        }
-	private Circle circle3point(Point a, Point b, Point c) {
-        double d = (a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)) * 2;
-        if (d == 0)
-            return null;
-        double x = ((norm(a) * (b.y - c.y)) + (norm(b) * (c.y - a.y)) + (norm(c) * (a.y - b.y)))
-                / d;
-        double y = ((norm(a) * (c.x - b.x)) + (norm(b) * (a.x - c.x)) + (norm(c) * (b.x - a.x)))
-                / d;
-        Point p = new Point((int) x, (int) y);
-        return new Circle(p, (int) Math.ceil(p.distance(a)));
-
-    }
-    private boolean contains(Circle c, Point p) {
-		if (p.distance(c.getCenter()) - c.getRadius() < 0.00001) {
-			return true;
-		}
-		return false;
-	}
-    private int norm(Point a) {
-		return (a.x * a.x) + (a.y * a.y);
-	}
-	private Circle bMinDisk(ArrayList<Point> Ps, ArrayList<Point> R) {
-		ArrayList<Point> P = new ArrayList<Point>(Ps);
-		Random r = new Random();
-		Circle D = null;
-
-		if (P.isEmpty() || R.size() == 3) {
-			D = trivialCircle(new ArrayList<Point>(), R);
-
-		} else {
-			Point p = P.get((r.nextInt(P.size())));
-			P.remove(p);
-
-			D = bMinDisk(P, R);
-			if (D != null && !contains(D, p)) {
-				R.add(p);
-				D = bMinDisk(P, R);
-				R.remove(p);
-			}
-		}
-
-		return D;
-	}
-	private Circle algoWelzl(ArrayList<Point> inputsPoints) {
-		
-		// TODO
-		// 1. Si la liste de points contient moins de trois deux, renvoyer un cercle de rayon 0
-		// 3. Si la liste de points contient deux points, renvoyer un cercle de rayon la distance entre les deux points
-		// 4. Si la liste de points contient trois points, renvoyer un cercle circonscrit au triangle formé par les trois points
-		// 5. Si la liste de points contient plus de trois points, renvoyer un cercle circonscrit au cercle circonscrit au sous-ensemble de points
-		//    obtenu en retirant un point aléatoire de la liste de points
-		/* ArrayList<Point> P = new ArrayList<Point>(inputsPoints);
-        ArrayList<Point> R = new ArrayList<Point>();
-        
-        if(P.isEmpty()|| R.size() == 3){
-            return trivialCircle(P,R);
-        }
-        else {
-            int index = (int) (Math.random() * P.size());
-            Point p = P.get(index);
-            P.remove(index);
-            Circle c = algoWelzl(P);
-            if(c.getRadius() >= p.distance(c.getCenter())){
-                R.add(p);
-                return c;
-            }
-            else {
-                R.add(p);
-                return algoWelzl(R);
-            }
-        } */
-        return bMinDisk(inputsPoints, new ArrayList<Point>());
-	}
-	
-	
-	private Circle algoNaif(ArrayList<Point> inputPoints){
+    // ----------------------------------------------------------------
+    // ------------------- CODE DU TME CORRIGE ------------------------
+    // ----------------------------------------------------------------
+    /**
+     * Algorithme naif pour le calcul du cercle minimum
+     * @param inputPoints
+     * @return cercle minimum
+     */
+    static public Circle algoNaif(ArrayList<Point> inputPoints){
 		ArrayList<Point> points = (ArrayList<Point>) inputPoints.clone();
 		if (points.size()<1) return null;
 		double cX,cY,cRadius,cRadiusSquared;
@@ -204,10 +79,127 @@ public class DefaultTeam {
                           allHit = false;
                           break;
                       }
-                  if (allHit) {System.out.println("Found r="+Math.sqrt(cRadiusSquared));resX=cX;resY=cY;resRadiusSquared=cRadiusSquared;}
+                  if (allHit) {
+                    //System.out.println("Found r="+Math.sqrt(cRadiusSquared));
+                    resX=cX;
+                    resY=cY;
+                    resRadiusSquared=cRadiusSquared;
+                }
               }
           }
       }
       return new Circle(new Point((int)resX,(int)resY),(int)Math.sqrt(resRadiusSquared));
   }
+  // -----------------------------------------------------------------------------
+
+    /**
+     * Algorithme de Welzl pour le calcul du cercle minimum
+     * @param inputPoints
+     * @return cercle minimum
+     */
+    static public Circle algoWelzl(ArrayList<Point> inputsPoints) {
+        return bMinDisk(inputsPoints, new ArrayList<Point>());
+    }
+
+    //methode recursive pour trouver le cercle minimum
+    private static Circle bMinDisk(ArrayList<Point> inpuPoints, ArrayList<Point> R) {
+        ArrayList<Point> P = new ArrayList<Point>(inpuPoints);
+        Random r = new Random();
+        Circle D = null;
+
+        if (P.isEmpty() || R.size() == 3) {
+            D = minCircleTrivial(new ArrayList<Point>(), R);
+
+        } else {
+            Point p = P.get((r.nextInt(P.size())));
+            P.remove(p);
+
+            D = bMinDisk(P, R);
+            if (D != null && !isInside(D, p)) {
+                R.add(p);
+                D = bMinDisk(P, R);
+                R.remove(p);
+            }
+        }
+        assert D != null;
+        return D;
+    }
+
+    //cercle trivial entre 0 et 3 points
+ 	private static Circle minCircleTrivial(ArrayList<Point> inputsPoints, ArrayList<Point> R){
+            if (inputsPoints.isEmpty() && R.size() == 0)
+                return new Circle(new Point(0, 0), 10);
+            Circle D = null;
+            if (R.size() == 1) {
+                D = new Circle(R.get(0), 0);
+            }
+            if (R.size() == 2) {
+                Point p = R.get(0);
+                Point q = R.get(1);
+				double cx = .5*(p.x+q.x); // calcul du centre du cercle
+				double cy = .5*(p.y+q.y); // calcul du centre du cercle
+				double cRadiusSquared = 0.25*((p.x-q.x)*(p.x-q.x)+(p.y-q.y)*(p.y-q.y)); // calcul du rayon du cercle
+                Point center = new Point((int) cx, (int) cy);
+                D = new Circle(center, (int)Math.sqrt(cRadiusSquared));
+            } else {
+                if (R.size() == 3){
+                    Point p = R.get(0);
+                    Point q = R.get(1);
+                    Point r = R.get(2);
+                    D = circle3point(p, q, r);
+                }
+            }
+            return D;
+        }
+
+    //Cercle du cercle circonscrit au triangle formé par les trois points : methode des coordonnées cartesiennes du centre du cercle circonscrit
+	private static Circle circle3point(Point a, Point b, Point c) {
+        //calcul determinant de la matrice pour trouver le centre du cercle
+        double d = (a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)) * 2;
+        if (d == 0)// si d = 0, les points sont coliénaire/aligés
+            return null;
+        //calcul des coordonnées du centre du cercle
+        double x = ((norm(a) * (b.y - c.y)) + (norm(b) * (c.y - a.y)) + (norm(c) * (a.y - b.y))) / d; 
+        double y = ((norm(a) * (c.x - b.x)) + (norm(b) * (a.x - c.x)) + (norm(c) * (b.x - a.x))) / d; 
+        Point p = new Point((int) x, (int) y);
+        return new Circle(p, (int) Math.ceil(p.distance(a))); 
+    }
+    // calcul de la norme euclidienne quadratique d'un point pour le calcul du centre du cercle
+    private static int norm(Point a) { 
+		return (a.x * a.x) + (a.y * a.y);
+	}
+
+    // Verifie si le point p est dans le cercle c
+    private static boolean isInside(Circle c, Point p) {
+        double dist = Math.sqrt((p.x - c.getCenter().x) * (p.x - c.getCenter().x) + (p.y - c.getCenter().y) * (p.y - c.getCenter().y));
+        return dist <= c.getRadius();
+    }
+    
+    // Verifie si le cercle c est valide = si tous les points de l'ensemble sont dans le cercle
+    private static boolean isValidCircle(Circle c,ArrayList<Point> inputsPoints) {
+        for (Point p : inputsPoints) {
+            if (!isInside(c, p)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+	
+    //--------------------------------------------------------------------------------
+    // -------------------- MAIN FUNCTION AVEC DIAM RACER ----------------------------
+    // --------------------------------------------------------------------------------
+	public Circle calculCercleMin(ArrayList<Point> points) {
+        Circle cercle;
+		// cercle = algoNaif(points);
+		cercle = algoWelzl(points);
+		
+        if(cercle != null && isValidCircle(cercle, points)) {
+            System.out.println("OK------------------");
+        }
+        else {
+            System.out.println("KO------------------");
+        }
+		return cercle;
+	}
 }
