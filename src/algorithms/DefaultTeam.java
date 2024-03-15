@@ -3,11 +3,11 @@ package algorithms;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Random;
-//Problème du cercle minimum / Smallest enclosing disk : Welzl algorithm
 import supportGUI.Circle;
-import supportGUI.Line;
 
 public class DefaultTeam {
+
+    //Problème du cercle minimum / Smallest enclosing disk : Welzl algorithm
 
     // ----------------------------------------------------------------
     // ------------------- CODE DU TME CORRIGE ------------------------
@@ -98,26 +98,27 @@ public class DefaultTeam {
      * @return cercle minimum
      */
     static public Circle algoWelzl(ArrayList<Point> inputsPoints) {
-        return bMinDisk(inputsPoints, new ArrayList<Point>());
+        return b_MinDisk(inputsPoints, new ArrayList<Point>());
     }
-
+    
     //methode recursive pour trouver le cercle minimum
-    private static Circle bMinDisk(ArrayList<Point> inpuPoints, ArrayList<Point> R) {
+    //source : http://www.stsci.edu/~RAB/Backup%20Oct%2022%202011/f_3_CalculationForWFIRSTML/Bob1.pdf
+    private static Circle b_MinDisk(ArrayList<Point> inpuPoints, ArrayList<Point> R) {
         ArrayList<Point> P = new ArrayList<Point>(inpuPoints);
         Random r = new Random();
         Circle D = null;
 
         if (P.isEmpty() || R.size() == 3) {
-            D = minCircleTrivial(new ArrayList<Point>(), R);
+            D = b_md(new ArrayList<Point>(), R);
 
         } else {
             Point p = P.get((r.nextInt(P.size())));
             P.remove(p);
 
-            D = bMinDisk(P, R);
+            D = b_MinDisk(P, R);
             if (D != null && !isInside(D, p)) {
                 R.add(p);
-                D = bMinDisk(P, R);
+                D = b_MinDisk(P, R);
                 R.remove(p);
             }
         }
@@ -126,7 +127,7 @@ public class DefaultTeam {
     }
 
     //cercle trivial entre 0 et 3 points
- 	private static Circle minCircleTrivial(ArrayList<Point> inputsPoints, ArrayList<Point> R){
+ 	private static Circle b_md(ArrayList<Point> inputsPoints, ArrayList<Point> R){
             if (inputsPoints.isEmpty() && R.size() == 0)
                 return new Circle(new Point(0, 0), 10);
             Circle D = null;
@@ -153,6 +154,7 @@ public class DefaultTeam {
         }
 
     //Cercle du cercle circonscrit au triangle formé par les trois points : methode des coordonnées cartesiennes du centre du cercle circonscrit
+    //source : https://en.wikipedia.org/wiki/Circumcircle#Cartesian_coordinates_2
 	private static Circle circle3point(Point a, Point b, Point c) {
         //calcul determinant de la matrice pour trouver le centre du cercle
         double d = (a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)) * 2;
