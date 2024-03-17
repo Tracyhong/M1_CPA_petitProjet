@@ -16,6 +16,22 @@ ant test
 ## Representations des graphs
 ouvrire le fichier jupyter notebook a l'adress : src/tests/graphique.ipynb
 
+### Dependances
+- [x] 1.  [Java 8]
+- [x] 2.  [Ant]
+- [x] 3.  [matplotlib]
+- [x] 4.  [jupyter notebook]
+- [x] 4.  [pandas]
+
+##installation des dependances
+- [x] 1.  [Java 8] : sudo apt-get install openjdk-8-jdk
+- [x] 2.  [Ant] : sudo apt-get/brew  install ant
+- [x] 3.  [matplotlib] : pip install matplotlib
+- [x] 4.  [jupyter notebook] : pip install jupyter
+- [x] 5.  [pandas] : pip install pandas
+
+
+
 ## Membre du groupe
 - [x] 1.  [Elhadj Alseiny Diallo] 
 - [x] 2.  [Tracy HONG]
