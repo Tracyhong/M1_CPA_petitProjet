@@ -98,9 +98,13 @@ public class DefaultTeam {
      * @return cercle minimum
      */
     static public Circle algoWelzl(ArrayList<Point> inputsPoints) {
-        return b_MinDisk(inputsPoints, new ArrayList<Point>());
+        Circle circle = b_MinDisk(inputsPoints, new ArrayList<Point>());
+        if(circle == null) {
+            System.out.println("Cercle minimum non trouvé");
+        }
+        return circle;
     }
-    
+
     //methode recursive pour trouver le cercle minimum
     //source : http://www.stsci.edu/~RAB/Backup%20Oct%2022%202011/f_3_CalculationForWFIRSTML/Bob1.pdf
     private static Circle b_MinDisk(ArrayList<Point> inpuPoints, ArrayList<Point> R) {
@@ -141,7 +145,7 @@ public class DefaultTeam {
 				double cy = .5*(p.y+q.y); // calcul du centre du cercle
 				double cRadiusSquared = 0.25*((p.x-q.x)*(p.x-q.x)+(p.y-q.y)*(p.y-q.y)); // calcul du rayon du cercle
                 Point center = new Point((int) cx, (int) cy);
-                D = new Circle(center, (int)Math.sqrt(cRadiusSquared));
+                D = new Circle(center, (int)Math.ceil(Math.sqrt(cRadiusSquared)));
             } else {
                 if (R.size() == 3){
                     Point p = R.get(0);
