@@ -101,11 +101,24 @@ public class Test {
         for (String file : files) {
             //lire le fichier de points
             ArrayList<Point> points = lireFichier(path + file);
-            //calculer le temps d'execution de l'algo naif
-            long tempsNaif = tempsNaif(points);
-            //calculer le temps d'execution de l'algo de Welzl
-            long tempsWelzl = tempsWelzl(points);
-                    
+            
+            ArrayList<Long> naiveExecTime = new ArrayList<>();
+            ArrayList<Long> welzlExecTime = new ArrayList<>();
+
+            for(int i = 0; i < 5; i++){ //boucler sur 5 pour avoir 5 echantillons puis faire la moyenne
+                System.out.println("Echantillon " + (i+1));
+
+                //calculer le temps d'execution de l'algo naif
+                long tempsNaif = tempsNaif(points);
+                naiveExecTime.add(tempsNaif);
+                //calculer le temps d'execution de l'algo de Welzl
+                long tempsWelzl = tempsWelzl(points);
+                welzlExecTime.add(tempsWelzl);
+            }
+            // ecrire dans un fichier de sortie les resultats de l'algo naif puis l'algo welzl
+            // format : nomFichier, tempsNaif, tempsWelzl
+            double tempsNaif = naiveExecTime.stream().mapToLong(Long::longValue).average().orElse(0.0);
+            double tempsWelzl = welzlExecTime.stream().mapToLong(Long::longValue).average().orElse(0.0);
             try {
             myWriter.write(file + ", " + tempsNaif + ", " + tempsWelzl + "\n");
             System.out.println(file + ", " + tempsNaif + ", " + tempsWelzl );
