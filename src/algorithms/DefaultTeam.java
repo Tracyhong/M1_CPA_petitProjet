@@ -10,6 +10,7 @@ package algorithms;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Random;
+
 import supportGUI.Circle;
 
 public class DefaultTeam {
