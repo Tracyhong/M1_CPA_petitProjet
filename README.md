@@ -26,15 +26,25 @@ ouvrire le fichier jupyter notebook a l'adress : src/tests/graphique.ipynb
 
 ### installation des dependances
  1.  [Java 8] :
-```bash sudo apt-get install openjdk-8-jdk```
+```bash 
+sudo apt-get install openjdk-8-jdk
+```
 2.  [Ant] : 
-```bash sudo apt-get/brew  install ant```
+```bash 
+sudo apt-get/brew  install ant
+```
 3.  [matplotlib] : 
-```bash pip install matplotlib```
+```bash 
+pip install matplotlib
+```
 4.  [jupyter notebook] : 
-```bash pip install jupyter```
+```bash 
+pip install jupyter
+```
 5.  [pandas] : 
-```bash pip install pandas```
+```bash 
+pip install pandas
+```
 
 
 
