@@ -125,14 +125,14 @@ public class Test {
     // sur les 1664 fichiers de tests, il y a dans chaque fichier 256 points
     // on peut commencer par combiner 2 fichiers puis 4 puis 8 puis 16 puis 32 puis 64 puis 128 puis 256 
 
-    public static void compareCombiningData(String path, String pathDataFile) throws IOException{//fichier ecriture
+    public static void compareCombiningData(String path, String pathDataFile, int NB_MAX_FILE) throws IOException{//fichier ecriture
         File dataFile = new File(pathDataFile);
         FileWriter myWriter;
         // if (dataFile.createNewFile()) {
         System.out.println("File created: " + dataFile.getName());
         myWriter = new FileWriter(pathDataFile);
         //write column names
-        myWriter.write("filename, tempsNaif, tempsWelzl\n");
+        myWriter.write("tempsNaif, tempsWelzl\n");
 
         //recuperer les fichiers de test
         File folder = new File(path);
@@ -151,8 +151,8 @@ public class Test {
         }
         int min = 2;
         int max = files.size()-1;
-        //boucler i = 2 jusqua 15 pour combiner i fichiers
-        for (int i = 2; i < 20; i++) {
+        //boucler i = 2 jusqua NB_MAX_FILE pour combiner i fichiers
+        for (int i = 2; i < NB_MAX_FILE; i++) {
             System.out.println("Combining " + i + " files");
             //boucler sur 5 pour avoir 5 echantillons puis faire la moyenne 
             ArrayList<Long> naiveExecTime = new ArrayList<>();
@@ -192,13 +192,13 @@ public class Test {
         myWriter.close();
     }
     public static void main(String[] args) throws IOException {
-        //print current directory
-        String current = new java.io.File( "." ).getCanonicalPath();
-        System.out.println(current);
         String path = "./samples/";
-        String pathDataFile = "./dataFile_256points.txt";
-        compareSimpleData(path,pathDataFile);
-        // String pathDataFile = "./dataFile_combiningPoints.txt";
-        // compareCombiningData(path, pathDataFile);
+        String pathDataFileSimple = "./src/tests/results/dataFile_256points.txt";
+        String pathDataFileCombining = "./src/tests/results/dataFile_combiningPoints.txt";
+
+        int NB_MAX_FILE = 20;
+        compareSimpleData(path,pathDataFileSimple);
+        compareCombiningData(path, pathDataFileCombining,NB_MAX_FILE);  //20 fichiers de test pour combiner mais c'est très long donc à reduire à 5 ou 10 si besoin 
+
     }
 }
