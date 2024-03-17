@@ -17,7 +17,6 @@ import supportGUI.Variables;
 
 public class Test {
 
-
     //methode pour calculer le temps d'execution de l'algorithme naif
     public static long tempsNaif(ArrayList<Point> points) {
         // long start = System.nanoTime();
@@ -67,8 +66,74 @@ public class Test {
         }
         return points;
     }
+    public static void compareSimpleDataResult(String path, String pathDataFile) throws IOException{
+        DefaultTeam defaultTeam = new DefaultTeam();
+        //fichier ecriture
+        File dataFile = new File(pathDataFile);
+        FileWriter myWriter;
+        // if (dataFile.createNewFile()) {
+        System.out.println("File created: " + dataFile.getName());
+        myWriter = new FileWriter(pathDataFile);
+        //write column names
+        myWriter.write("filename, tempsNaif, tempsWelzl\n");
+        
+        //fichier de test dans sample
+        //recuperer les fichiers de test
+        File folder = new File(path);
+        if(!folder.exists()){
+            System.out.println("Folder not found");
+            return;
+        }
+        ArrayList<String> files = new ArrayList<String>();
+        
+        for (final File fileEntry : folder.listFiles()) {
+            if (fileEntry.isDirectory() || fileEntry.getName().equals("test-1.points")) {
+                continue;
+            } else {
+                // System.out.println(fileEntry.getName());
+                files.add(fileEntry.getName());
+            }
+        }
+        //boucler sur les fichiers de test
+        for (String file : files) {
+            //lire le fichier de points
+            ArrayList<Point> points = lireFichier(path + file);
+            
+            ArrayList<Long> naiveRadiusList = new ArrayList<>();
+            ArrayList<Long> welzlRadiusList = new ArrayList<>();
 
-    //methode pour comparer simplement les deux algorithmes sur les fichiers de test 
+            for(int i = 0; i < 5; i++){ //boucler sur 5 pour avoir 5 echantillons puis faire la moyenne
+                System.out.println("Echantillon " + (i+1));
+
+                //caluler diametre
+                Circle naiveCircle = defaultTeam.algoNaif(points);
+                Circle welzlCircle = defaultTeam.algoWelzl(points);
+                if(naiveCircle == null || welzlCircle == null){
+                    continue;
+                }
+                naiveRadiusList.add((long)naiveCircle.getRadius());
+                welzlRadiusList.add((long)welzlCircle.getRadius());
+
+            }
+            // ecrire dans un fichier de sortie les resultats de l'algo naif puis l'algo welzl
+            // format : nomFichier, tempsNaif, tempsWelzl
+            double naiveRadius = naiveRadiusList.stream().mapToLong(Long::longValue).average().orElse(0.0);
+            double welzlRadius = welzlRadiusList.stream().mapToLong(Long::longValue).average().orElse(0.0);
+            try {
+            myWriter.write(file + ", " + naiveRadius + ", " + welzlRadius + "\n");
+            System.out.println(file + ", " + naiveRadius + ", " + welzlRadius );
+            } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+            }
+        }
+        myWriter.close();
+        //ecrire dans un fichier de sortie les resultats de l'algo naif puis l'algo welzl 
+        //format : nomFichier, tempsNaif, tempsWelzl
+
+    }
+   
+        //methode pour comparer simplement les deux algorithmes sur les fichiers de test 
     public static void compareSimpleData(String path, String pathDataFile) throws IOException{
         
         //fichier ecriture
@@ -204,14 +269,18 @@ public class Test {
         }
         myWriter.close();
     }
+    
+
     public static void main(String[] args) throws IOException {
         String path = "./samples/";
+        String pathDataFileSimpleResult = "./src/tests/results/dataFile_256points_results.txt";
         String pathDataFileSimple = "./src/tests/results/dataFile_256points.txt";
         String pathDataFileCombining = "./src/tests/results/dataFile_combiningPoints.txt";
 
         int NB_MAX_FILE = 20;
+        // compareSimpleDataResult(path,pathDataFileSimpleResult);
         compareSimpleData(path,pathDataFileSimple);
-        compareCombiningData(path, pathDataFileCombining,NB_MAX_FILE);  //20 fichiers de test pour combiner mais c'est très long donc à reduire à 5 ou 10 si besoin 
+        // compareCombiningData(path, pathDataFileCombining,NB_MAX_FILE);  //20 fichiers de test pour combiner mais c'est très long donc à reduire à 5 ou 10 si besoin 
 
     }
 }

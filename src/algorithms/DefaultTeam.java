@@ -99,9 +99,6 @@ public class DefaultTeam {
      */
     static public Circle algoWelzl(ArrayList<Point> inputsPoints) {
         Circle circle = b_MinDisk(inputsPoints, new ArrayList<Point>());
-        if(circle == null) {
-            System.out.println("Cercle minimum non trouvé");
-        }
         return circle;
     }
 
