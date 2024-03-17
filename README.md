@@ -12,6 +12,7 @@ Pour exécuter les tests du projet, utilisez la commande suivante :
 
 ```bash
 ant test
+```
 
 ## Representations des graphs
 ouvrire le fichier jupyter notebook a l'adress : src/tests/graphique.ipynb
