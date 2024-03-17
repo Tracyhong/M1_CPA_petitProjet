@@ -1,3 +1,10 @@
+/**
+ * CPA petit projet 2023
+ * Problème du cercle minimum / Smallest enclosing disk : Welzl algorithm
+ * ETUDIANTS STL :
+ *  - Elhadj Alseiny DIALLO - 21314820
+ *  - Tracy HONG - 21314944
+ */
 package algorithms;
 
 import java.awt.Point;
@@ -7,7 +14,7 @@ import supportGUI.Circle;
 
 public class DefaultTeam {
 
-    //Problème du cercle minimum / Smallest enclosing disk : Welzl algorithm
+    
 
     // ----------------------------------------------------------------
     // ------------------- CODE DU TME CORRIGE ------------------------
@@ -148,7 +155,7 @@ public class DefaultTeam {
                     Point p = R.get(0);
                     Point q = R.get(1);
                     Point r = R.get(2);
-                    D = circle3point(p, q, r);
+                    D = circleFrom3Point(p, q, r);
                 }
             }
             return D;
@@ -156,7 +163,7 @@ public class DefaultTeam {
 
     //Cercle du cercle circonscrit au triangle formé par les trois points : methode des coordonnées cartesiennes du centre du cercle circonscrit
     //source : https://en.wikipedia.org/wiki/Circumcircle#Cartesian_coordinates_2
-	private static Circle circle3point(Point a, Point b, Point c) {
+	private static Circle circleFrom3Point(Point a, Point b, Point c) {
         //calcul determinant de la matrice pour trouver le centre du cercle
         double d = (a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y)) * 2;
         if (d == 0)// si d = 0, les points sont coliénaire/aligés

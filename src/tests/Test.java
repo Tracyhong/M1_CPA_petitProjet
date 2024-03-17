@@ -75,7 +75,7 @@ public class Test {
         System.out.println("File created: " + dataFile.getName());
         myWriter = new FileWriter(pathDataFile);
         //write column names
-        myWriter.write("filename, tempsNaif, tempsWelzl\n");
+        myWriter.write("filename, naiveRadius, welzlCircle\n");
         
         //fichier de test dans sample
         //recuperer les fichiers de test
@@ -273,13 +273,13 @@ public class Test {
 
     public static void main(String[] args) throws IOException {
         String path = "./samples/";
-        String pathDataFileSimpleResult = "./src/tests/results/dataFile_256points_results.txt";
+        String pathDataFileSimpleResult = "./src/tests/results/dataFile_256points_results_1.txt";
         String pathDataFileSimple = "./src/tests/results/dataFile_256points.txt";
         String pathDataFileCombining = "./src/tests/results/dataFile_combiningPoints.txt";
 
         int NB_MAX_FILE = 20;
-        // compareSimpleDataResult(path,pathDataFileSimpleResult);
-        compareSimpleData(path,pathDataFileSimple);
+        compareSimpleDataResult(path,pathDataFileSimpleResult);
+        // compareSimpleData(path,pathDataFileSimple);
         // compareCombiningData(path, pathDataFileCombining,NB_MAX_FILE);  //20 fichiers de test pour combiner mais c'est très long donc à reduire à 5 ou 10 si besoin 
 
     }
