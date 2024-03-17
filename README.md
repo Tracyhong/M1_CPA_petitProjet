@@ -11,7 +11,7 @@ Ce projet implémente l'algorithme de Welzl pour trouver le cercle minimum englo
 Pour exécuter les tests du projet, utilisez la commande suivante :
 
 ```bash
-ant tests
+ant test
 
 ## Representations des graphs
 ouvrire le fichier jupyter notebook a l'adress : src/tests/graphique.ipynb
